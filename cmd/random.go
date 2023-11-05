@@ -4,10 +4,11 @@ Copyright © 2023 David Baker
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
-	"io"
 
 	"github.com/spf13/cobra"
 )
@@ -19,7 +20,15 @@ type Joke struct {
 }
 
 func getRandomJoke() {
-	fmt.Println("Get random dad joke <HERE>")
+	url := "https://icanhazdadjoke.com/"
+	responseBytes := getJokeData(url)
+	joke := Joke{}
+
+	if err := json.Unmarshal(responseBytes, &joke); err != nil {
+		log.Printf("Could not unmarshal responseBytes. %v", err)
+	}
+
+	fmt.Println(string(joke.Joke))
 }
 
 func getJokeData(baseAPI string) []byte {
