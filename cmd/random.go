@@ -1,11 +1,13 @@
 /*
 Copyright © 2023 David Baker
-
 */
 package cmd
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"io"
 
 	"github.com/spf13/cobra"
 )
@@ -16,6 +18,39 @@ type Joke struct {
 	Status int    `json:"status"`
 }
 
+func getRandomJoke() {
+	fmt.Println("Get random dad joke <HERE>")
+}
+
+func getJokeData(baseAPI string) []byte {
+	request, err := http.NewRequest(
+		http.MethodGet,  // method
+		baseAPI,         // url
+		nil,             // body
+	)
+
+	if err != nil {
+		log.Printf("Could not request a dadjoke. %v", err)
+	}
+
+	request.Header.Add("Accept", "application/json")
+	request.Header.Add("User-Agent", "My Library (https://github.com/Dbaker1298/dadjoke)")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		log.Printf("Could not make request. %v", err)
+	}
+
+	responseBytes, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Printf("Could not read response body. %v", err)
+	}
+
+	defer response.Body.Close()
+
+	return responseBytes
+}
+
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
 	Use:   "random",
@@ -24,7 +59,7 @@ var randomCmd = &cobra.Command{
 
 Dad jokes are essential to life and children's development.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("random called")
+		getRandomJoke()
 	},
 }
 
