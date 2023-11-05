@@ -19,18 +19,6 @@ type Joke struct {
 	Status int    `json:"status"`
 }
 
-func getRandomJoke() {
-	url := "https://icanhazdadjoke.com/"
-	responseBytes := getJokeData(url)
-	joke := Joke{}
-
-	if err := json.Unmarshal(responseBytes, &joke); err != nil {
-		log.Printf("Could not unmarshal responseBytes. %v", err)
-	}
-
-	fmt.Println(string(joke.Joke))
-}
-
 func getJokeData(baseAPI string) []byte {
 	request, err := http.NewRequest(
 		http.MethodGet,  // method
@@ -59,6 +47,21 @@ func getJokeData(baseAPI string) []byte {
 
 	return responseBytes
 }
+
+func getRandomJoke() {
+	url := "https://icanhazdadjoke.com/"
+	responseBytes := getJokeData(url)
+	joke := Joke{}
+
+	if err := json.Unmarshal(responseBytes, &joke); err != nil {
+		log.Printf("Could not unmarshal responseBytes. %v", err)
+	}
+
+	fmt.Println()
+	fmt.Println(string(joke.Joke))
+	fmt.Println()
+}
+
 
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
