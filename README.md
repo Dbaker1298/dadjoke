@@ -48,5 +48,14 @@ Usage:
   dadjoke random [flags]
 
 Flags:
-  -h, --help   help for random
+  -h, --help          help for random
+      --term string   A search term to find a Dad joke with.
+```
+
+### Example
+
+```bash
+go build -o bin/dadjoke && ./bin/dadjoke random --term=foot
+
+“Hold on, I have something in my shoe”  “I’m pretty sure it’s a foot”
 ```
