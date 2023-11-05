@@ -91,6 +91,24 @@ func getRandomJokeWithTerm(term string) {
 	fmt.Println("Term: ", term)
 }
 
+func getJokeDataWithTerm(jokeTerm string) (totalJokes int, jokesList []Joke) {
+	url := fmt.Sprintf("https://icanhazdadjoke.com/search?term=%s", jokeTerm)
+	responseBytes := getJokeData(url)
+
+	jokeListRaw := SearchResult{}
+
+	if err := json.Unmarshal(responseBytes, &jokeListRaw); err != nil {
+		log.Printf("Could not unmarshal responseBytes. %v", err)
+	}
+
+	jokes := []Joke{}
+	if err := json.Unmarshal(jokeListRaw.Results, &jokes); err != nil {
+		log.Printf("Could not unmarshal responseBytes. %v", err)
+	}
+
+	return jokeListRaw.TotalJokes, jokes
+}
+
 func init() {
 	rootCmd.AddCommand(randomCmd)
 	randomCmd.PersistentFlags().String("term", "", "A search term to find a Dad joke with.")
