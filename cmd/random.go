@@ -19,11 +19,18 @@ type Joke struct {
 	Status int    `json:"status"`
 }
 
+type SearchResult struct {
+	Results    json.RawMessage `json:"results"`
+	SearchTerm string          `json:"search_term"`
+	Status     int             `json:"status"`
+	TotalJokes int             `json:"total_jokes"`
+}
+
 func getJokeData(baseAPI string) []byte {
 	request, err := http.NewRequest(
-		http.MethodGet,  // method
-		baseAPI,         // url
-		nil,             // body
+		http.MethodGet, // method
+		baseAPI,        // url
+		nil,            // body
 	)
 
 	if err != nil {
@@ -62,7 +69,6 @@ func getRandomJoke() {
 	fmt.Println()
 }
 
-
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
 	Use:   "random",
@@ -87,5 +93,5 @@ func getRandomJokeWithTerm(term string) {
 
 func init() {
 	rootCmd.AddCommand(randomCmd)
-		randomCmd.PersistentFlags().String("term", "", "A search term to find a Dad joke with.")
+	randomCmd.PersistentFlags().String("term", "", "A search term to find a Dad joke with.")
 }
