@@ -87,8 +87,9 @@ Dad jokes are essential to life and children's development.`,
 	},
 }
 
-func getRandomJokeWithTerm(term string) {
-	fmt.Println("Term: ", term)
+func getRandomJokeWithTerm(jokeTerm string) {
+	_, results := getJokeDataWithTerm(jokeTerm)
+	fmt.Println(results)
 }
 
 func getJokeDataWithTerm(jokeTerm string) (totalJokes int, jokesList []Joke) {
