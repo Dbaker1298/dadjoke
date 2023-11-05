@@ -9,6 +9,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
+	"math/rand"
 
 	"github.com/spf13/cobra"
 )
@@ -87,9 +89,27 @@ Dad jokes are essential to life and children's development.`,
 	},
 }
 
+func randomiseJokeList(length int, jokeList []Joke) {
+	rand.Seed(time.Now().Unix())
+
+	min := 0
+	max := length - 1
+
+	if length <= 0 {
+		err := fmt.Errorf("No jokes found with this term")
+		fmt.Println(err.Error())
+	} else {
+		randomNum := min + rand.Intn(max-min)
+		fmt.Println(jokeList[randomNum].Joke)
+	}
+}
+
+
 func getRandomJokeWithTerm(jokeTerm string) {
-	_, results := getJokeDataWithTerm(jokeTerm)
-	fmt.Println(results)
+	total, results := getJokeDataWithTerm(jokeTerm)
+	fmt.Println()
+	randomiseJokeList(total, results)
+	fmt.Println()
 }
 
 func getJokeDataWithTerm(jokeTerm string) (totalJokes int, jokesList []Joke) {
